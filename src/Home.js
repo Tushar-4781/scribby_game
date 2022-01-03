@@ -9,9 +9,6 @@ class Home extends React.Component{
     this.state = {
         isDrawing : false
     }
-    // this.draw = this.draw.bind(this)
-    // this.endDraw = this.endDraw.bind(this)
-    // this.startDraw = this.startDraw.bind(this)
   };
 
   componentDidMount(){
