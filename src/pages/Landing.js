@@ -1,5 +1,6 @@
 import React from "react"
 import "./Landing.css"
+import { withRouter } from "react-router-dom";
 
 class Landing extends React.Component{
     constructor(){
@@ -40,6 +41,8 @@ class Landing extends React.Component{
             localStorage.setItem('user', newUser)
             // cookies.set('user', newUser , { path: '/' });
             this.setState({name:newUser});
+            this.props.history.push("/room/123");
+
         }
     }
     componentDidMount(){
@@ -66,4 +69,4 @@ class Landing extends React.Component{
         )
     }
 }
-export default Landing;
+export default withRouter(Landing);

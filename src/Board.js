@@ -1,7 +1,10 @@
 import React from 'react';
-import './App.css';
+import io from "socket.io-client"
 
-class Home extends React.Component{
+import './App.css';
+const socket = io("http://localhost:8000/")
+
+class Board extends React.Component{
   constructor(props){
     super(props);
     this.canvasRef = React.createRef();
@@ -9,6 +12,8 @@ class Home extends React.Component{
     this.state = {
         isDrawing : false
     }
+
+    
   };
 
   componentDidMount(){
@@ -25,6 +30,8 @@ class Home extends React.Component{
     context.lineWidth = 5
     console.log(context)
     this.contextRef.current = context;
+    console.log(this.contextRef.current)
+    
     
   }
   
@@ -37,15 +44,31 @@ class Home extends React.Component{
   }
 
   endDraw = ()=>{
+    
     this.contextRef.current.closePath()
+    // console.log(this.canvasRef.current)
+    // console.log(document.getElementById("can"))
+    setTimeout(()=>{
+      var base64ImageData = this.canvasRef.current.toDataURL("image/png");
+      socket.emit("canvas-data",base64ImageData)
+    },1000)
     this.setState({isDrawing:false});
     
   }
-
+    
   draw = (event) =>{
       if(!this.state.isDrawing){
+        socket.on("canvas-data",(data)=>{
+          var image = new Image();
+          
+          image.onload = ()=>{
+            this.contextRef.current.drawImage(image,0,0)
+          }
+          image.src = data;
+        })
           return
       }
+
     const {offsetX, offsetY} = event.nativeEvent
     this.contextRef.current.lineTo(offsetX,offsetY)
     this.contextRef.current.stroke()
@@ -56,7 +79,7 @@ class Home extends React.Component{
   render(){
     return (
         <canvas
-
+          id='can'
           onMouseDown={(e)=>{this.startDraw(e)}}
           onMouseUp={this.endDraw}
           onMouseMove={(e)=>{this.draw(e)}}
@@ -67,4 +90,4 @@ class Home extends React.Component{
   }
 }
 
-export default Home;
+export default Board;

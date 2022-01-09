@@ -1,8 +1,9 @@
-import Home from './Home';
+import Home from './pages/Home';
 import './App.css';
 import Landing from './pages/Landing';
 import { Route, Switch, useLocation } from "react-router-dom";
 import Dashboard from './pages/Dashboard';
+import Room from './pages/Room';
 
 function App() {
   return (
@@ -11,8 +12,14 @@ function App() {
         <Route path="/Dashboard">
           <Dashboard/>
         </Route>
-        <Route path="/">
+        <Route path="/Landing">
           <Landing/>
+        </Route>
+        <Route path="/room/:room_id">
+          <Room/>
+        </Route>
+        <Route path="/">
+          <Home/>
         </Route>
       </Switch>
     </div>
